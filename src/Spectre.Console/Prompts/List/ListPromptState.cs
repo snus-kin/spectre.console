@@ -126,7 +126,9 @@ internal sealed class ListPromptState<T>
             if (!char.IsControl(keyInfo.KeyChar))
             {
                 search = SearchText + keyInfo.KeyChar;
-                var item = Items.FirstOrDefault(x => x.Data.ToString()?.Contains(search, StringComparison.OrdinalIgnoreCase) == true && (!x.IsGroup || Mode != SelectionMode.Leaf));
+                var item = Items.FirstOrDefault(x => x.Representation != null && x.Representation?.Contains(search, StringComparison.OrdinalIgnoreCase) == true && (!x.IsGroup || Mode != SelectionMode.Leaf)) ??
+                    Items.FirstOrDefault(x => x.Data.ToString()?.Contains(search, StringComparison.OrdinalIgnoreCase) == true && (!x.IsGroup || Mode != SelectionMode.Leaf));
+
                 if (item != null)
                 {
                     index = Items.IndexOf(item);

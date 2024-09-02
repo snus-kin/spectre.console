@@ -116,7 +116,8 @@ public static class MultiSelectionPromptExtensions
         var root = obj.AddChoice(group);
         foreach (var choice in choices)
         {
-            root.AddChild(choice);
+            var representation = (obj.Converter ?? TypeConverterHelper.ConvertToString)(choice);
+            root.AddChild(choice, representation);
         }
 
         return obj;
@@ -141,7 +142,8 @@ public static class MultiSelectionPromptExtensions
         var root = obj.AddChoice(group);
         foreach (var choice in choices)
         {
-            root.AddChild(choice);
+            var representation = (obj.Converter ?? TypeConverterHelper.ConvertToString)(choice);
+            root.AddChild(choice, representation);
         }
 
         return obj;

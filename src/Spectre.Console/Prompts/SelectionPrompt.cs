@@ -83,7 +83,8 @@ public sealed class SelectionPrompt<T> : IPrompt<T>, IListPromptStrategy<T>
     /// <returns>A <see cref="ISelectionItem{T}"/> so that multiple calls can be chained.</returns>
     public ISelectionItem<T> AddChoice(T item)
     {
-        var node = new ListPromptItem<T>(item);
+        var representation = (Converter ?? TypeConverterHelper.ConvertToString)(item);
+        var node = new ListPromptItem<T>(item, representation);
         _tree.Add(node);
         return node;
     }
@@ -189,7 +190,7 @@ public sealed class SelectionPrompt<T> : IPrompt<T>, IListPromptStrategy<T>
 
             var indent = new string(' ', item.Node.Depth * 2);
 
-            var text = (Converter ?? TypeConverterHelper.ConvertToString)?.Invoke(item.Node.Data) ?? item.Node.Data.ToString() ?? "?";
+            var text = item.Node.Representation ?? item.Node.Data.ToString() ?? "?";
             if (current)
             {
                 text = text.RemoveMarkup().EscapeMarkup();

@@ -4,6 +4,11 @@ public sealed class SelectionPromptTests
 {
     private const string ESC = "\u001b";
 
+    private class TestClass
+    {
+        public string Name { get; init; }
+    }
+
     [Fact]
     public void Should_Not_Throw_When_Selecting_An_Item_With_Escaped_Markup()
     {
@@ -41,6 +46,30 @@ public sealed class SelectionPromptTests
 
         // Then
         selection.ShouldBe("A");
+    }
+
+    [Fact]
+    public void Should_Search_In_Remapped_Object_Result()
+    {
+
+        // Given
+        var console = new TestConsole();
+        console.Profile.Capabilities.Interactive = true;
+        console.EmitAnsiSequences();
+        console.Input.PushText("2");
+        console.Input.PushKey(ConsoleKey.Enter);
+        var myObject = new List<TestClass>{ new() { Name = "Item 1" }, new() { Name = "Item 2" } };
+
+        // When
+        var prompt = new SelectionPrompt<TestClass>()
+            .Title("Select one")
+            .EnableSearch()
+            .UseConverter(o => o.Name)
+            .AddChoices(myObject);
+        var selection = prompt.Show(console);
+
+        // Then
+        selection.Name.ShouldBe("Item 2");
     }
 
     [Fact]

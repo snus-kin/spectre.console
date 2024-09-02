@@ -4,6 +4,7 @@ internal sealed class ListPromptItem<T> : IMultiSelectionItem<T>
     where T : notnull
 {
     public T Data { get; }
+    public string? Representation { get; }
     public ListPromptItem<T>? Parent { get; }
     public List<ListPromptItem<T>> Children { get; }
     public int Depth { get; }
@@ -11,9 +12,10 @@ internal sealed class ListPromptItem<T> : IMultiSelectionItem<T>
 
     public bool IsGroup => Children.Count > 0;
 
-    public ListPromptItem(T data, ListPromptItem<T>? parent = null)
+    public ListPromptItem(T data, string? representation = null, ListPromptItem<T>? parent = null)
     {
         Data = data;
+        Representation = representation;
         Parent = parent;
         Children = new List<ListPromptItem<T>>();
         Depth = CalculateDepth(parent);
@@ -25,9 +27,9 @@ internal sealed class ListPromptItem<T> : IMultiSelectionItem<T>
         return this;
     }
 
-    public ISelectionItem<T> AddChild(T item)
+    public ISelectionItem<T> AddChild(T item, string? representation = null)
     {
-        var node = new ListPromptItem<T>(item, this);
+        var node = new ListPromptItem<T>(item, representation, this);
         Children.Add(node);
         return node;
     }

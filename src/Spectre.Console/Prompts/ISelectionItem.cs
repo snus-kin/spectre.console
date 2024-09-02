@@ -11,6 +11,7 @@ public interface ISelectionItem<T>
     /// Adds a child to the item.
     /// </summary>
     /// <param name="child">The child to add.</param>
+    /// <param name="representation">The result of the conversion function.</param>
     /// <returns>A new <see cref="ISelectionItem{T}"/> instance representing the child.</returns>
-    ISelectionItem<T> AddChild(T child);
+    ISelectionItem<T> AddChild(T child, string? representation = null);
 }

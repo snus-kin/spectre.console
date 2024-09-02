@@ -78,7 +78,8 @@ public sealed class MultiSelectionPrompt<T> : IPrompt<List<T>>, IListPromptStrat
     /// <returns>A <see cref="IMultiSelectionItem{T}"/> so that multiple calls can be chained.</returns>
     public IMultiSelectionItem<T> AddChoice(T item)
     {
-        var node = new ListPromptItem<T>(item);
+        var representation = (Converter ?? TypeConverterHelper.ConvertToString)(item);
+        var node = new ListPromptItem<T>(item, representation);
         Tree.Add(node);
         return node;
     }
